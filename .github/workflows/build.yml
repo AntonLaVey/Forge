@@ -24,6 +24,7 @@ jobs:
           git clone https://github.com/theos/sdks.git $THEOS/sdks
       - name: Build Tweak
         run: |
+          rm -rf .theos
           make clean
           make FINALPACKAGE=1
 
