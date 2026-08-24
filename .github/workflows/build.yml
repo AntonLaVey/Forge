@@ -3,14 +3,30 @@ on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: macos-latest
+    env:
+      THEOS: ${{ github.workspace }}/theos
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Project
+        uses: actions/checkout@v4
+
+      - name: Install System Dependencies
+        run: brew install ldid make dpkg xz
+
       - name: Setup Theos
-        uses: theos/setup-theos@v2
+        uses: actions/checkout@v4
+        with:
+          repository: theos/theos
+          path: theos
+          submodules: recursive
+
+      - name: Setup iOS SDKs
+        run: git clone https://github.com/theos/sdks.git $THEOS/sdks
+
       - name: Build Tweak
-        run: make package FINALPACKAGE=1
+        run: make FINALPACKAGE=1
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: SeedCatcher_Dylib
-          path: .theos/obj/debug/*.dylib
+          path: .theos/obj/**/*.dylib
