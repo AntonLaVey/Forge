@@ -22,7 +22,8 @@ jobs:
           git clone --recursive https://github.com/theos/theos.git $THEOS
           rm -rf $THEOS/sdks
           git clone https://github.com/theos/sdks.git $THEOS/sdks
-      - name: Build Tweak
+
+      - name: Build Library
         run: |
           rm -rf .theos
           make clean
