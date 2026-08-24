@@ -7,10 +7,10 @@ jobs:
       - name: Checkout Project
         uses: actions/checkout@v4
 
-      - name: Get Substrate Library
+      - name: Get Real Substrate Library
         run: |
-          # Pull the precompiled substrate library for linking
-          curl -sSL https://github.com/theos/lib/raw/master/libsubstrate.dylib -o libsubstrate.dylib
+          git clone --depth 1 https://github.com/theos/lib.git theos_lib
+          cp theos_lib/libsubstrate.dylib .
 
       - name: Compile with Clang
         run: |
