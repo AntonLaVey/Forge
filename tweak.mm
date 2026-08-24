@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 #import <mach-o/dyld.h>
-#import <substrate.h>
+#import "substrate.h"
 
 void (*old_OnCreateSteppingStonesRunResponse)(void* instance, void* response_obj, void* method_info);
 
@@ -20,5 +20,5 @@ void new_OnCreateSteppingStonesRunResponse(void* instance, void* response_obj, v
 
 __attribute__((constructor)) void setup_hook() {
     uint64_t base_address = _dyld_get_image_vmaddr_slide(0); 
-    MSHookFunction((void*)(base_address + 0x5066F14), (void*)new_OnCreateSteppingStonesRunResponse, (void**)&old_OnCreateSteppingStonesRunResponse);[cite: 1]
+    MSHookFunction((void*)(base_address + 0x5066F14), (void*)new_OnCreateSteppingStonesRunResponse, (void**)&old_OnCreateSteppingStonesRunResponse);
 }
