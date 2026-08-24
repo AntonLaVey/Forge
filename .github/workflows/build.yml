@@ -10,8 +10,8 @@ jobs:
       - name: Get Dependencies
         run: |
           git clone --depth 1 https://github.com/theos/sdks.git sdks
-          # Download substrate header for manual compilation
-          curl -o substrate.h https://raw.githubusercontent.com/theos/headers/master/substrate.h
+          # Correct raw link for the Substrate header
+          curl -o substrate.h https://raw.githubusercontent.com/theos/headers/master/substrate/substrate.h
 
       - name: Compile with Clang
         run: |
