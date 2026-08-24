@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 #import <mach-o/dyld.h>
-#import <substrate/substrate.h>
+#import "substrate.h"
 
 void (*old_OnCreateSteppingStonesRunResponse)(void* instance, void* response_obj, void* method_info);
 
