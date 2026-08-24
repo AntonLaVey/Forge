@@ -1,0 +1,9 @@
+Package: com.custom.seedcatcher
+Name: SeedCatcher
+Depends: mobilesubstrate
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: Stepping Stones Seed Interceptor
+Maintainer: Dev
+Author: Dev
+Section: Tweaks
