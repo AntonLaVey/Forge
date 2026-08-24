@@ -7,11 +7,9 @@ jobs:
       - name: Checkout Project
         uses: actions/checkout@v4
 
-      - name: Get Dependencies
+      - name: Get SDK
         run: |
           git clone --depth 1 https://github.com/theos/sdks.git sdks
-          # Pull the actual substrate.h header straight into the workspace root
-          curl -sSL https://raw.githubusercontent.com/theos/headers/master/substrate/substrate.h -o substrate.h
 
       - name: Compile with Clang
         run: |
