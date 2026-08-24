@@ -10,8 +10,8 @@ jobs:
       - name: Get Dependencies
         run: |
           git clone --depth 1 https://github.com/theos/sdks.git sdks
-          # Removed depth limit to ensure submodules and headers fully populate
-          git clone --recursive https://github.com/theos/theos.git theos
+          # Pull the actual substrate.h header straight into the workspace root
+          curl -sSL https://raw.githubusercontent.com/theos/headers/master/substrate/substrate.h -o substrate.h
 
       - name: Compile with Clang
         run: |
@@ -22,7 +22,7 @@ jobs:
             -dynamiclib \
             -isysroot "$SDK_PATH" \
             -miphoneos-version-min=14.0 \
-            -Itheos/vendor/include \
+            -I. \
             -framework Foundation \
             -framework UIKit \
             Tweak.mm \
