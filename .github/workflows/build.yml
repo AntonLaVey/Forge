@@ -9,18 +9,18 @@ jobs:
       - name: Checkout Project
         uses: actions/checkout@v4
 
-      - name: Install System Dependencies
-        run: brew install ldid make dpkg xz
+      - name: Fix Homebrew & Install Dependencies
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
+          HOMEBREW_NO_REQUIRE_TAP_TRUST: 1
+        run: |
+          brew untap aws/tap || true
+          brew install ldid dpkg xz
 
-      - name: Setup Theos
-        uses: actions/checkout@v4
-        with:
-          repository: theos/theos
-          path: theos
-          submodules: recursive
-
-      - name: Setup iOS SDKs
-        run: git clone https://github.com/theos/sdks.git $THEOS/sdks
+      - name: Setup Theos & SDKs
+        run: |
+          git clone --recursive https://github.com/theos/theos.git $THEOS
+          git clone https://github.com/theos/sdks.git $THEOS/sdks
 
       - name: Build Tweak
         run: make FINALPACKAGE=1
