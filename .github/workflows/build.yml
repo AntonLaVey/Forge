@@ -7,9 +7,11 @@ jobs:
       - name: Checkout Project
         uses: actions/checkout@v4
 
-      - name: Get iOS SDK
+      - name: Get Dependencies
         run: |
           git clone --depth 1 https://github.com/theos/sdks.git sdks
+          # Download substrate header for manual compilation
+          curl -o substrate.h https://raw.githubusercontent.com/theos/headers/master/substrate.h
 
       - name: Compile with Clang
         run: |
@@ -20,6 +22,7 @@ jobs:
             -dynamiclib \
             -isysroot "$SDK_PATH" \
             -miphoneos-version-min=14.0 \
+            -I. \
             -framework Foundation \
             -framework UIKit \
             Tweak.mm \
