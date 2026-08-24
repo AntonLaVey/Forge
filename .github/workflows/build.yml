@@ -7,6 +7,11 @@ jobs:
       - name: Checkout Project
         uses: actions/checkout@v4
 
+      - name: Get Substrate Library
+        run: |
+          # Pull the precompiled substrate library for linking
+          curl -sSL https://github.com/theos/lib/raw/master/libsubstrate.dylib -o libsubstrate.dylib
+
       - name: Compile with Clang
         run: |
           mkdir -p output
@@ -16,6 +21,8 @@ jobs:
             -isysroot $(xcrun --sdk iphoneos --show-sdk-path) \
             -miphoneos-version-min=14.0 \
             -I. \
+            -L. \
+            -lsubstrate \
             -framework Foundation \
             -framework UIKit \
             Tweak.mm \
