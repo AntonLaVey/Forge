@@ -1,5 +1,6 @@
 #import <UIKit/UIKit.h>
 #import <mach-o/dyld.h>
+#import <dlfcn.h>
 #import "substrate.h"
 
 void (*old_OnCreateSteppingStonesRunResponse)(void* instance, void* response_obj, void* method_info);
@@ -18,7 +19,28 @@ void new_OnCreateSteppingStonesRunResponse(void* instance, void* response_obj, v
     }
 }
 
+static void image_loaded(const struct mach_header *mhp, intptr_t vmaddr_slide) {
+    Dl_info info;
+    if (dladdr(mhp, &info) && info.dli_fname) {
+        // Look for the main game executable or framework name in the path.
+        // If your game is Unity-based, it might load inside "UnityFramework". 
+        // If it's a standalone binary, check for the app's executable name or let it catch the main binary.
+        NSString *path = [NSString stringWithUTF8String:info.dli_fname];
+        
+        // Adjust this condition if your target function lives in a specific framework 
+        // (e.g., [path containsString:@"UnityFramework"] or similar), 
+        // otherwise leave it to check the main app bundle binary:
+        if ([path rangeOfString:@".app/"].location != NSNotFound && [path rangeOfString:@".app/PlugIns/"] == NSNotFound) {
+            static bool hasHooked = false;
+            if (!hasHooked) {
+                void *target_address = (void*)(vmaddr_slide + 0x5066F14);
+                MSHookFunction(target_address, (void*)new_OnCreateSteppingStonesRunResponse, (void**)&old_OnCreateSteppingStonesRunResponse);
+                hasHooked = true;
+            }
+        }
+    }
+}
+
 __attribute__((constructor)) void setup_hook() {
-    uint64_t base_address = _dyld_get_image_vmaddr_slide(0); 
-    MSHookFunction((void*)(base_address + 0x5066F14), (void*)new_OnCreateSteppingStonesRunResponse, (void**)&old_OnCreateSteppingStonesRunResponse);
+    _dyld_register_func_for_add_image(image_loaded);
 }
