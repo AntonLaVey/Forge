@@ -8,7 +8,7 @@
 		     only injects SeedCatcher into that process. -->
 		<key>Bundles</key>
 		<array>
-			<string>com.example.REPLACE_WITH_GAME_BUNDLE_ID</string>
+			<string>com.hariwn.legendofcivilizations.seed</string>
 		</array>
 	</dict>
 </dict>
