@@ -7,11 +7,6 @@ jobs:
       - name: Checkout Project
         uses: actions/checkout@v4
 
-      - name: Get Real Substrate Library
-        run: |
-          git clone --depth 1 https://github.com/theos/lib.git theos_lib
-          cp theos_lib/libsubstrate.dylib .
-
       - name: Compile with Clang
         run: |
           mkdir -p output
@@ -21,8 +16,6 @@ jobs:
             -isysroot $(xcrun --sdk iphoneos --show-sdk-path) \
             -miphoneos-version-min=14.0 \
             -I. \
-            -L. \
-            -lsubstrate \
             -framework Foundation \
             -framework UIKit \
             Tweak.mm \
