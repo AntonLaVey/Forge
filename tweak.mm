@@ -22,15 +22,12 @@ void new_OnCreateSteppingStonesRunResponse(void* instance, void* response_obj, v
 static void image_loaded(const struct mach_header *mhp, intptr_t vmaddr_slide) {
     Dl_info info;
     if (dladdr(mhp, &info) && info.dli_fname) {
-        // Look for the main game executable or framework name in the path.
-        // If your game is Unity-based, it might load inside "UnityFramework". 
-        // If it's a standalone binary, check for the app's executable name or let it catch the main binary.
         NSString *path = [NSString stringWithUTF8String:info.dli_fname];
         
-        // Adjust this condition if your target function lives in a specific framework 
-        // (e.g., [path containsString:@"UnityFramework"] or similar), 
-        // otherwise leave it to check the main app bundle binary:
-        if ([path rangeOfString:@".app/"].location != NSNotFound && [path rangeOfString:@".app/PlugIns/"] == NSNotFound) {
+        BOOL isAppBundle = [path rangeOfString:@".app/"].location != NSNotFound;
+        BOOL isPlugin = [path rangeOfString:@".app/PlugIns/"].location != NSNotFound;
+        
+        if (isAppBundle && !isPlugin) {
             static bool hasHooked = false;
             if (!hasHooked) {
                 void *target_address = (void*)(vmaddr_slide + 0x5066F14);
