@@ -7,18 +7,13 @@ jobs:
       - name: Checkout Project
         uses: actions/checkout@v4
 
-      - name: Get SDK
-        run: |
-          git clone --depth 1 https://github.com/theos/sdks.git sdks
-
       - name: Compile with Clang
         run: |
           mkdir -p output
-          SDK_PATH=$(ls -d sdks/iPhoneOS*.sdk | head -n 1)
           
           xcrun --sdk iphoneos clang++ -arch arm64 \
             -dynamiclib \
-            -isysroot "$SDK_PATH" \
+            -isysroot $(xcrun --sdk iphoneos --show-sdk-path) \
             -miphoneos-version-min=14.0 \
             -I. \
             -framework Foundation \
