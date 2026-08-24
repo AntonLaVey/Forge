@@ -3,7 +3,7 @@ ARCHS = arm64
 include $(THEOS)/makefiles/common.mk
 
 LIBRARY_NAME = SeedCatcher
-SeedCatcher_FILES = Tweak.cpp
+SeedCatcher_FILES = Tweak.mm
 SeedCatcher_CFLAGS = -fobjc-arc
 SeedCatcher_LIBRARIES = substrate
 
