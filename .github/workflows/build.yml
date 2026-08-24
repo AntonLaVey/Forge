@@ -4,7 +4,8 @@ jobs:
   build:
     runs-on: macos-latest
     env:
-      THEOS: ${{ github.workspace }}/theos
+      # Moved outside the workspace so GitHub's cleanup script ignores it!
+      THEOS: ~/theos
     steps:
       - name: Checkout Project
         uses: actions/checkout@v4
