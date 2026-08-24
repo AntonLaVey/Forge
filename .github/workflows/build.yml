@@ -22,7 +22,7 @@ jobs:
             -miphoneos-version-min=14.0 \
             -framework Foundation \
             -framework UIKit \
-            Tweak.cpp \
+            Tweak.mm \
             -o output/SeedCatcher.dylib
 
       - name: Upload Artifact
