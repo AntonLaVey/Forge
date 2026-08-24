@@ -17,6 +17,7 @@ jobs:
           
           xcrun --sdk iphoneos clang++ -arch arm64 \
             -dynamiclib \
+            -fobjc-arc \
             -isysroot $(xcrun --sdk iphoneos --show-sdk-path) \
             -miphoneos-version-min=14.0 \
             -I. \
