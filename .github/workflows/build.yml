@@ -1,36 +1,32 @@
-name: Compile Tweak
+name: Compile Library
 on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: macos-latest
-    env:
-      THEOS: /Users/runner/theos
     steps:
       - name: Checkout Project
         uses: actions/checkout@v4
 
-      - name: Fix Homebrew & Install Dependencies
-        env:
-          HOMEBREW_NO_AUTO_UPDATE: 1
-          HOMEBREW_NO_REQUIRE_TAP_TRUST: 1
+      - name: Get iOS SDK
         run: |
-          brew untap aws/tap || true
-          brew install ldid dpkg xz
+          git clone --depth 1 https://github.com/theos/sdks.git sdks
 
-      - name: Setup Theos & SDKs
+      - name: Compile with Clang
         run: |
-          git clone --recursive https://github.com/theos/theos.git $THEOS
-          rm -rf $THEOS/sdks
-          git clone https://github.com/theos/sdks.git $THEOS/sdks
-
-      - name: Build Library
-        run: |
-          rm -rf .theos
-          make clean
-          make FINALPACKAGE=1
+          mkdir -p output
+          SDK_PATH=$(ls -d sdks/iPhoneOS*.sdk | head -n 1)
+          
+          xcrun --sdk iphoneos clang++ -arch arm64 \
+            -dynamiclib \
+            -isysroot "$SDK_PATH" \
+            -miphoneos-version-min=14.0 \
+            -framework Foundation \
+            -framework UIKit \
+            Tweak.cpp \
+            -o output/SeedCatcher.dylib
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: SeedCatcher_Dylib
-          path: .theos/obj/**/*.dylib
+          path: output/SeedCatcher.dylib
