@@ -4,7 +4,7 @@ jobs:
   build:
     runs-on: macos-latest
     env:
-      THEOS: ~/theos
+      THEOS: /Users/runner/theos
     steps:
       - name: Checkout Project
         uses: actions/checkout@v4
