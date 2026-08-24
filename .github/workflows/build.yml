@@ -7,6 +7,10 @@ jobs:
       - name: Checkout Project
         uses: actions/checkout@v4
 
+      - name: Get Substrate Stub
+        run: |
+          git clone --depth 1 https://github.com/theos/lib.git theos_lib
+
       - name: Compile with Clang
         run: |
           mkdir -p output
@@ -16,6 +20,8 @@ jobs:
             -isysroot $(xcrun --sdk iphoneos --show-sdk-path) \
             -miphoneos-version-min=14.0 \
             -I. \
+            -Ltheos_lib \
+            -lsubstrate \
             -framework Foundation \
             -framework UIKit \
             Tweak.mm \
