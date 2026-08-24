@@ -4,7 +4,6 @@ jobs:
   build:
     runs-on: macos-latest
     env:
-      # Moved outside the workspace so GitHub's cleanup script ignores it!
       THEOS: ~/theos
     steps:
       - name: Checkout Project
@@ -21,6 +20,7 @@ jobs:
       - name: Setup Theos & SDKs
         run: |
           git clone --recursive https://github.com/theos/theos.git $THEOS
+          rm -rf $THEOS/sdks
           git clone https://github.com/theos/sdks.git $THEOS/sdks
 
       - name: Build Tweak
